@@ -2,6 +2,8 @@ import os
 import sys
 os.chdir("C:\\Users\\jdealmeida\\Documents\\PC_PERSO\\ICPC\\ICPC_groupe6\\")
 
+voitures = []
+
 class Voiture:
     nom = 0
     distance = 0
@@ -18,7 +20,7 @@ def parcourrir_fichier(fic):
     line_v = line[:-1]
     numLine = 0
     voiture = 0
-    voitures = []
+    global voitures
     while line:
         numLine = numLine+1
         if line == '-1':
@@ -56,15 +58,65 @@ def parcourrir_fichier(fic):
         line = file.readline()
         line_v = line[:-1]
     file.close()
-    for ma_voiture in voitures:
-        print(ma_voiture.nom, type(ma_voiture.nom))
-        print(ma_voiture.distance, type(ma_voiture.distance))
-        print(ma_voiture.capacite, type(ma_voiture.capacite))
-        print(ma_voiture.mile_g, type(ma_voiture.mile_g))
-        print(ma_voiture.cout_remp, type(ma_voiture.cout_remp))
-        print(ma_voiture.nb_stations, type(ma_voiture.nb_stations))
-        for etape in range(1,(int(ma_voiture.nb_stations)+1)):
-            print(str(etape)+": " + str(ma_voiture.etapes[etape-1]), type(ma_voiture.etapes[etape-1]), "\n")
+    # for ma_voiture in voitures:
+    #     print(ma_voiture.nom, type(ma_voiture.nom))
+    #     print(ma_voiture.distance, type(ma_voiture.distance))
+    #     print(ma_voiture.capacite, type(ma_voiture.capacite))
+    #     print(ma_voiture.mile_g, type(ma_voiture.mile_g))
+    #     print(ma_voiture.cout_remp, type(ma_voiture.cout_remp))
+    #     print(ma_voiture.nb_stations, type(ma_voiture.nb_stations))
+    #     for etape in range(1,(int(ma_voiture.nb_stations)+1)):
+    #         print(str(etape)+": " + str(ma_voiture.etapes[etape-1]), type(ma_voiture.etapes[etape-1]), "\n")
     #print(ma_voiture.etapes)
 
+def synthese_etape(voiture,etape,gallons):
+    print("Synthèse étape",etape+1,":\n")
+    print("Carburant disponible (gallons) :",gallons)
+    print("Distance restante :",voitures[voiture].distance - voitures[voiture].etapes[etape][0])
+    print("Distance réalisable :",voitures[voiture].mile_g * gallons)
+    print("Prix du remplissage dans cette station :",(voitures[voiture].capacite - gallons) * (voitures[voiture].etapes[etape][1]/100))
+    if ((voitures[voiture].etapes[etape][0] + (voitures[voiture].mile_g * gallons)) >= voitures[voiture].etapes[etape+1][0]):
+        print("Prix du remplissage dans la prochaine station :",(voitures[voiture].capacite - (gallons - (voitures[voiture].etapes[etape+1][0] - voitures[voiture].etapes[etape][0]) / voitures[voiture].mile_g)) * (voitures[voiture].etapes[etape+1][1]/100))
+
+def calcul_voiture(voiture):
+    print("Distance à parcourrir",voitures[voiture].distance)
+    prix = voitures[voiture].cout_remp
+    distance = 0.00
+    gallons = voitures[voiture].capacite
+    print("Distance parcourrue",distance)
+    print("Capacité du réservoir",gallons)
+    print("Prix temporaire",format((prix),'.2f'))
+    for etape in range(0,(int(voitures[voiture].nb_stations))):
+        print("Etape",etape+1)
+        gallons -= (voitures[voiture].etapes[etape][0] - distance) / voitures[voiture].mile_g
+        distance = voitures[voiture].etapes[etape][0]
+        print("Distance parcourrue",distance)
+        print("Capacité du réservoir",format(gallons,'.2f'))
+        if(( distance + (voitures[voiture].mile_g * gallons)) < voitures[voiture].distance):
+            if(gallons <= (voitures[voiture].capacite/2)):
+                synthese_etape(voiture,etape,gallons)
+                if((distance + (voitures[voiture].mile_g * gallons)) >= voitures[voiture].etapes[etape+1][0]):
+                    if ((distance + (voitures[voiture].mile_g * voitures[voiture].capacite)) >= voitures[voiture].distance - distance):  
+                        if( (voitures[voiture].capacite - gallons) * (voitures[voiture].etapes[etape][1]/100) <= (voitures[voiture].capacite - (gallons - (voitures[voiture].etapes[etape+1][0] - distance) / voitures[voiture].mile_g)) * (voitures[voiture].etapes[etape+1][1]/100)):
+                            prix += 2
+                            print("Calcul:",(voitures[voiture].capacite - gallons) * (voitures[voiture].etapes[etape][1]/100))
+                            prix += (voitures[voiture].capacite - gallons) * (voitures[voiture].etapes[etape][1]/100)
+                            gallons = voitures[voiture].capacite
+                            print("Prix temporaire",format(prix,'.2f'))
+                else:
+                    prix += 2
+                    print("Calcul:",(voitures[voiture].capacite - gallons) * (voitures[voiture].etapes[etape][1]/100))
+                    prix += (voitures[voiture].capacite - gallons) * (voitures[voiture].etapes[etape][1]/100)
+                    gallons = voitures[voiture].capacite
+                    print("Prix temporaire",format(prix,'.2f'))
+    return format(prix,'.2f')
+
+def affichage_resultat():
+    for voiture in range(len(voitures)):
+        print("Voiture n°",str(voiture+1),":",calcul_voiture(voiture))
+        print("\n")
+        print("\n")
+
 parcourrir_fichier("fichier.txt_old")
+#affichage_resultat()
+calcul_voiture(1)
