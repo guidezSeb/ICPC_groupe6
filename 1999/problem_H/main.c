@@ -1,12 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
 #define eps 1e-6
 
 int main() {
-    double V;
     int cas = 0;
     int n, m, A[1058];
+    double V, h= 0, sum = 0;
+
     while (scanf("%d %d", &n ,&m) == 2) {
          if (n < 30 && m < 30){
         for (int i = 0; i < n; i++)
@@ -17,7 +19,6 @@ int main() {
         n = n*m;
         A[n] = 1*exp(10);
         printf("Region %d\n", ++cas);
-        double h= 0, sum = 0;
         for (int i = 0; i < n; i++) {
             sum += A[i];
             h = (V+sum*100)/(i+1)/100.0;
