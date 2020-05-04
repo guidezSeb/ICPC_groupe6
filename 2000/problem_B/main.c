@@ -1,34 +1,45 @@
 #include <stdio.h>
 #include <string.h>
 
-char s[1024];
 
-void dfs(int index, int pl, int n) {
-	//char operator[] = "*+-";
+void calculSol(char expr[]) {
+//faire l operation
+}
+
+void defIndex(int index, int place, int n, char *s) {
+    char path[1024];
+	char operator[] = "*+-";
 	if (index == n) {
-	//check
+		path[place] = '\0';
+		if (place > n)
+		//calculSol(path);
+		return ;
 	}
 	if (index != n-1) {
-	//recursif
+	for (int i = 0; i < 3; i++) {
+			path[place] = s[index], path[place + 1] = operator[i];
+			defIndex(index+1, place+2, n,s);
+		}
 	}
-	dfs(index+1, pl+1, n);
+	path[place] = s[index];
+	defIndex(index+1, place +1, n,s);
 }
 
 int main() {
-	int n, sol;
+	int sol,n;
 	int cases = 0;
-
+char s[1024];
 	while (scanf("%s", s) == 1) {
 		if (!strcmp(s, "="))
 			break;
 		n = strlen(s);
 		s[n - 1] = '\0';
-		n--;
 		sol = 0;
 		printf("Problem %d\n", ++cases);
-		dfs(0, 0, n);
+		n--;
+		defIndex(0, 0, n,s);
 		if (sol == 0)
-			printf("IMPOSSIBLE");
+			printf("IMPOSSIBLE\n");
 	}
 	return 0;
 }

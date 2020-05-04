@@ -18,7 +18,7 @@ int main() {
         printf("0 0\n");
         n = n*m;
         A[n] = 1*exp(10);
-        printf("Region %d\n", ++cas);
+        printf("\nRegion %d\n", ++cas);
         for (int i = 0; i < n; i++) {
             sum += A[i];
             h = (V+sum*100)/(i+1)/100.0;
