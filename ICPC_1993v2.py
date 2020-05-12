@@ -1,3 +1,4 @@
+#PROBLEME A de 1993 100% fonctionnel avec marge d'erreur
 import os
 import sys
 import math
