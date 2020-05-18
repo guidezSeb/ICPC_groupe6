@@ -1,3 +1,5 @@
+#PROBLEME A de 2015 100% fonctionnel résultat attendu OK
+
 import os
 import sys
 import math
