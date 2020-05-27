@@ -29,7 +29,7 @@ void calculSol(char expr[])
 		{
 			int num = 0;
 			if (expr[i] == '0' && expr[i + 1] >= '0' && expr[i + 1] <= '9')
-				return; // 01, 001, ...
+				return;
 			while (expr[i] >= '0' && expr[i] <= '9')
 			{
 				num = num * 10 + expr[i] - '0';
@@ -51,7 +51,7 @@ void calculSol(char expr[])
 	checkSum(place, sum, expr, index);
 }
 
-void defIndex(int index, int place, int n, char *s)
+void defIndex(int index, int place, int n, char *stop)
 {
 	char operator[] = "*+-";
 	if (index == n)
@@ -65,30 +65,31 @@ void defIndex(int index, int place, int n, char *s)
 	{
 		for (int i = 0; i < 3; i++)
 		{
-			path[place] = s[index], path[place + 1] = operator[i];
-			defIndex(index + 1, place + 2, n, s);
+			path[place] = stop[index];
+			path[place + 1] = operator[i];
+			defIndex(index + 1, place + 2, n, stop);
 		}
 	}
-	path[place] = s[index];
-	defIndex(index + 1, place + 1, n, s);
+	path[place] = stop[index];
+	defIndex(index + 1, place + 1, n, stop);
 }
 
 int main()
 {
 	int n;
 	int cases = 0;
-	char s[1024];
+	char stop[1024];
 	printf("Veuillez rentrer une operation ou rentrer = pour quitter\n");
-	while (scanf("%s", s) == 1)
+	while (scanf("%s", stop) == 1)
 	{
-		if (!strcmp(s, "="))
+		if (!strcmp(stop, "="))
 			break;
         sol = 0;
-		n = strlen(s);
-		s[n - 1] = '\0';
+		n = strlen(stop);
+		stop[n - 1] = '\0';
 		n--;
 		printf("Probleme %d\n", ++cases);
-		defIndex(0, 0, n, s);
+		defIndex(0, 0, n, stop);
 		if (sol == 0)
 			printf("IMPOSSIBLE\n");
 	}

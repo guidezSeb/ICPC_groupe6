@@ -4,13 +4,13 @@
 int main() {
     int n, i, j;
     int test = 0;
-    int A[1000];
-    while(scanf("%d", &A[0]) == 1) {
+    int buff[1000];
+    while(scanf("%d", &buff[0]) == 1) {
         n = 1;
-        if(A[0] < 0)
+        if(buff[0] < 0)
             break;
-        while(scanf("%d", &A[n]) == 1) {
-            if(A[n] < 0)
+        while(scanf("%d", &buff[n]) == 1) {
+            if(buff[n] < 0)
                 break;
             else
                 n++;
